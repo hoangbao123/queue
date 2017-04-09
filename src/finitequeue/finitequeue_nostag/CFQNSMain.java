@@ -4,6 +4,8 @@ package finitequeue_nostag;
 import org.cloudbus.cloudsim.*;
 import org.cloudbus.cloudsim.core.CloudSim;
 
+import java.io.File;
+
 //import controlmidleserverstag.CFQNSHelper;
 
 import java.io.FileWriter;
@@ -17,10 +19,11 @@ import java.util.List;
 public class CFQNSMain {
     public static double[] muy = {0.2};
     public static double[] alpha = {0.02};//, 0.001};//,0.5, 1, 5, 10, 20, 50, 100, 150, 200};
-    public static int[] capacity = {100};//, 3000, 2000, 1000};
+    public static int[] capacity = {100,200,500};//, 3000, 2000, 1000};
     public static double[] listThrUp = {0.3};
     public static double[] listThrDown = {-0.3};
     public static int timetomiddle = 400;
+    public static double[] theta = {0.02};
 
     public static void chayvoilamdathaydoimultiqueues() throws IOException {
          // file luu kq
@@ -513,7 +516,7 @@ public class CFQNSMain {
         double[] meanNumberOffToMiddleServer = new double[n];
         double[] timenextlist = new double[n];
         double[] jobLostRatio = new double[n];
-
+        
         for (int indexMuy = 0; indexMuy < muy.length; indexMuy++) {
             for (int j = 0; j < alpha.length; j++) {
 
@@ -600,7 +603,7 @@ public class CFQNSMain {
                             System.out.println("mean ON server Length: " + datacenter0.getMeanNumberOnServer());
 
                             System.out.println("total time no Middle server: " + datacenter0.getTimeNoMiddle());
-
+                           
                             System.out.println("number of job (trong khoang thoi gian xet: " + ((CFQNSBroker) broker).getNumberOfJob());
                             System.out.println("**** total job lost: " + datacenter0.getNumberOfJobLost());
                             System.out.println("**** ti le job lost = joblost / numberofjob: " + datacenter0.getNumberOfJobLost() / ((CFQNSBroker) broker).getNumberOfJob());
@@ -1031,7 +1034,8 @@ public class CFQNSMain {
                             System.out.println("mean ON server Length: " + datacenter0.getMeanNumberOnServer());
 
                             System.out.println("total time no Middle server: " + datacenter0.getTimeNoMiddle());
-
+                            System.out.println("num of left job:"+ datacenter0.getNumberOfLeftJob());
+                            System.out.println("num of completed job:"+ datacenter0.getNumberOfCompletedJob());
                             System.out.println("number of job (trong khoang thoi gian xet: " + ((CFQNSBroker) broker).getNumberOfJob());
                             System.out.println("**** total job lost: " + datacenter0.getNumberOfJobLost());
                             System.out.println("**** ti le job lost = joblost / numberofjob: " + datacenter0.getNumberOfJobLost() / ((CFQNSBroker) broker).getNumberOfJob());
@@ -1362,7 +1366,7 @@ public class CFQNSMain {
 
         boolean hasTimeInitQueue = true; // thay doi cai nay phai thay doi ham init() trong file datacenter
 
-        double[] lamdaarray = {1,2,3,4,5,6,7,8,9,10,11};//14,15,16,17,18,19,20};
+        double[] lamdaarray = {1,2,3,4,5,6,7,8,9,10,11,12,1314,15,16,17,18,19,20};
         int n = lamdaarray.length;
 
         double[] meanWaittimeNoMiddle = new double[n];
@@ -1379,6 +1383,9 @@ public class CFQNSMain {
         double[] meanNumberOffToMiddleServer = new double[n];
         double[] timenextlist = new double[n];
         double[] jobLostRatio = new double[n];
+        double[] numberOfLeftJob =new double[n];
+        double[] numberOfCompletedJob =new double[n];
+
 
         for (int indexMuy = 0; indexMuy < muy.length; indexMuy++) {
             for (int j = 0; j < alpha.length; j++) {
@@ -1386,7 +1393,7 @@ public class CFQNSMain {
                 for (int indexK = 0; indexK < capacity.length; indexK++) {
 
                     // cho lambda thay doi
-                    for (int i = 10; i < lamdaarray.length; i++) {
+                    for (int i = 0; i < lamdaarray.length; i++) {
 
                         // chay co middle
                         // chay voi co control middle
@@ -1398,11 +1405,12 @@ public class CFQNSMain {
                             CFQNSHelper.hostNum = 100;
                             CFQNSHelper.setAlpha(alpha[j]);
                             CFQNSHelper.jobsqueuecapacity = capacity[indexK];
+                            CFQNSHelper.theta = theta[j];
                             CFQNSHelper.jobsqueuethresholdup = (int) (CFQNSHelper.jobsqueuecapacity * CFQNSHelper.thrUP);
                             CFQNSHelper.jobsqueuethresholddown = (int) (CFQNSHelper.jobsqueuecapacity * CFQNSHelper.thrDown);
                             CFQNSHelper.setMuy(muy[indexMuy]); // thoi gian phuc vu 1/ muy = 5
                             CFQNSHelper.setTimeOffToMiddle(timetomiddle);
-
+                            CFQNSHelper.theta = theta[j];
                             CFQNSHelper.setLamda(lamdaarray[i]);
                             CFQNSHelper.isSingleQueue = true;
 //                    CMSHelper.setControlTime(200);
@@ -1469,13 +1477,15 @@ public class CFQNSMain {
                             System.out.println("mean ON server Length: " + datacenter0.getMeanNumberOnServer());
 
                             System.out.println("total time no Middle server: " + datacenter0.getTimeNoMiddle());
-
+                            System.out.println("num of left job:"+ datacenter0.getNumberOfLeftJob());
+                            System.out.println("num of completed job:"+ datacenter0.getNumberOfCompletedJob());
                             System.out.println("number of job (trong khoang thoi gian xet: " + ((CFQNSBroker) broker).getNumberOfJob());
                             System.out.println("**** total job lost: " + datacenter0.getNumberOfJobLost());
                             System.out.println("**** ti le job lost = joblost / numberofjob: " + datacenter0.getNumberOfJobLost() / ((CFQNSBroker) broker).getNumberOfJob());
                             System.out.println("total vm: " + CFQNSHelper.getVmid());
                             System.out.println("total sub datacenter create: " + CFQNSHelper.listSubDatacenter.size());
                             System.out.println("so lan tat may ON  " + CFQNSHelper.extraCount);
+                            System.out.println("so job tinh kieu khac:"+datacenter0.number);
                             System.out.println();
 
 
@@ -1485,12 +1495,15 @@ public class CFQNSMain {
 
                             meanNumberOffToMiddleServer[i] = datacenter0.getMeanNumberOff2MiddleServer() ;// CFQNSHelper.timeOffToMiddle / CFQNSHelper.timenext;
                             timenextlist[i] = CFQNSHelper.timenext;
+                            numberOfCompletedJob[i] = datacenter0.getNumberOfCompletedJob();
+                            numberOfLeftJob[i] = datacenter0.getNumberOfLeftJob();
                             jobLostRatio[i] = datacenter0.getNumberOfJobLost() / ((CFQNSBroker) broker).getNumberOfJob();
 
                             meanWaittime[i] = ((CFQNSBroker) broker).getMeanWaittingTime();
                             meanResponsetime[i] = ((CFQNSBroker) broker).getMeanResponseTime();
                             numberONTurnoff[i] = CFQNSHelper.extraCount;
                             numberOfQueue[i] = CFQNSHelper.listSubDatacenter.size();
+                            
 //                Log.printLine(CMSHelper.getWaittingTime(newList));
 
                         } catch (Exception e) {
@@ -1592,6 +1605,7 @@ public class CFQNSMain {
                     // in ket qua: voi h = h[j]
                     // ket qua co the copy vao matlab de ve
                     FileWriter fw = null;
+                    
                     System.out.println();
                     try {
                         fw = new FileWriter("results_CFQNS_no_stag_alpha_" + CFQNSHelper.alpha + "_capacity_"
@@ -1641,10 +1655,10 @@ public class CFQNSMain {
                     System.out.print("mean number middle server = [");
                     fw.write("mean_number_of_middle_server" + CFQNSHelper.jobsqueuecapacity + " = [");
                     for (int i = 0; i < n - 1; i++) {
-                        System.out.printf("%.2f ,", meanNumberMiddleServer[i]);
+                        System.out.printf( meanNumberMiddleServer[i]+",");
                         fw.write(meanNumberMiddleServer[i] + ", ");
                     }
-                    System.out.printf("%.2f ];", meanNumberMiddleServer[n - 1]);
+                    System.out.printf( meanNumberMiddleServer[n - 1]+"]");
                     fw.write(meanNumberMiddleServer[n - 1] + "];\n");
                     System.out.println();
 
@@ -1681,40 +1695,61 @@ public class CFQNSMain {
                     System.out.print("mean number turned off = [");
                     fw.write("mean_number_turned_off" + CFQNSHelper.jobsqueuecapacity + " = [");
                     for (int i = 0; i < n - 1; i++) {
-                        System.out.print(" ," + numberONTurnoff[i]);
+                        System.out.print( numberONTurnoff[i]+",");
                         fw.write(numberONTurnoff[i] + ", ");
                     }
-                    System.out.print(" ," + numberONTurnoff[n - 1]);
+                    System.out.print( numberONTurnoff[n - 1]+"];");
                     fw.write(numberONTurnoff[n - 1] + "];\n");
                     System.out.println();
 
                     System.out.print("max number of queue = [");
                     fw.write("max_number_of_queue" + CFQNSHelper.jobsqueuecapacity + " = [");
                     for (int i = 0; i < n - 1; i++) {
-                        System.out.print(" ," + numberOfQueue[i]);
+                        System.out.print( numberOfQueue[i]+",");
                         fw.write(numberOfQueue[i] + ", ");
                     }
-                    System.out.print(" ," + numberOfQueue[n - 1]);
+                    System.out.print(  numberOfQueue[n - 1]+"]");
                     fw.write(numberOfQueue[n - 1] + "];\n");
                     System.out.println();
 
                     System.out.print("time next = [");
                     fw.write("time_next" + CFQNSHelper.jobsqueuecapacity + " = [");
                     for (int i = 0; i < n - 1; i++) {
-                        System.out.print(" ," + timenextlist[i]);
+                        System.out.print(timenextlist[i]+",");
                         fw.write(timenextlist[i] + ", ");
                     }
-                    System.out.print(" ," + timenextlist[n - 1]);
+                    System.out.print(  timenextlist[n - 1]+" ];");
                     fw.write(timenextlist[n - 1] + "];\n");
+                    System.out.println();
 
-
+                    System.out.print("completed job =[");
+                    fw.write("completed job"+CFQNSHelper.jobsqueuecapacity+" = [");
+                    for (int i = 0; i < n - 1; i++) {
+                        System.out.print( numberOfCompletedJob[i]+" , ");
+                        fw.write(numberOfCompletedJob[i] + ", ");
+                    }
+                    System.out.print(numberOfCompletedJob[n-1]+"];\n");
+                    fw.write(numberOfCompletedJob[n-1]+"];\n");
+                    
+                    System.out.print("leave job =[");
+                    fw.write("left job"+CFQNSHelper.jobsqueuecapacity+" = [");
+                    for (int i = 0; i < n - 1; i++) {
+                        System.out.print( numberOfLeftJob[i]+",");
+                        fw.write(numberOfLeftJob[i] + ", ");
+                    }
+                    System.out.print( numberOfLeftJob[n-1]+"]");
+                    fw.write(numberOfLeftJob[n-1]+",]\n");
+                    System.out.println();
+                    
+                    
+                    
                     System.out.print("job lost ratio = [");
                     fw.write("job_lost_ratio"+CFQNSHelper.jobsqueuecapacity+" = [");
                     for (int i = 0; i < n - 1; i++) {
-                        System.out.print(" ," + jobLostRatio[i]);
+                        System.out.printf(  jobLostRatio[i]+",");
                         fw.write(jobLostRatio[i] + ", ");
                     }
-                    System.out.print(" ," + jobLostRatio[n - 1]);
+                    System.out.print( jobLostRatio[n - 1]+"]");
                     fw.write(jobLostRatio[n - 1] + "];\n");
 
 
@@ -2536,6 +2571,10 @@ public class CFQNSMain {
             alpha[0] = Double.parseDouble(args[1]);
             capacity = new int[1];
             capacity[0] = Integer.parseInt(args[2]);
+            theta = new double[1];
+            
+            
+            
             if(args.length == 5) {
                 listThrDown = new double[1];
                 listThrDown[0] = Double.parseDouble(args[3]);

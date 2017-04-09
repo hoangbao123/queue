@@ -37,7 +37,7 @@ public class CFQNSDatacenter extends Datacenter {
 
     public static CFQNSMiddleHostQueue<Object> numberONQueue = new CFQNSMiddleHostQueue<>();
     public static CFQNSMiddleHostQueue<Object> numberWAITINGQueue = new CFQNSMiddleHostQueue<>();
-
+    
     //-----------------
 
     public List<Host> listHostON;
@@ -50,7 +50,9 @@ public class CFQNSDatacenter extends Datacenter {
     private double timeOffToMiddle;
     private double verifySetupMode = -1;
     private boolean hasMiddle = true;
-    private long count =0,count2 =0;
+    private long numberOfJobLeave =0, numberOfCompletedJob=0;
+    public int number=0;
+    public boolean start = false;
 
 //    private boolean disableEventCMS = false;
 //    private boolean isSubSystem = false;
@@ -150,7 +152,7 @@ public class CFQNSDatacenter extends Datacenter {
 
 
     }
-
+    
     public void toWAITING(){ // from ON
         if(state == CFQNSDatacenter.ON) {
 
@@ -191,7 +193,12 @@ public class CFQNSDatacenter extends Datacenter {
         }
     }
 
-
+    public long getNumberOfLeftJob(){
+    	return numberOfJobLeave;
+    }
+    public long getNumberOfCompletedJob(){
+    	return numberOfCompletedJob;
+    }
 
     public void toOFForWAITING(){
         // day la xu ly khi hang doi rong
@@ -350,8 +357,8 @@ public class CFQNSDatacenter extends Datacenter {
     protected void processJobComplete(SimEvent ev) {
         CFQNSJob job =(CFQNSJob) ev.getData();
         ((CFQNSHost)job.getHost()).setJob(null);
-        count2++;
-        Log.printLine("job hoan thanh:"+count2);
+        if(start) numberOfCompletedJob++;
+        //Log.printLine("job hoan thanh:"+count2);
         job.setTimeComplete(CloudSim.clock());
         Log.printLine("job hoan thanh voi thoi gian cho la " + (job.getTimeStartExe() - job.getTimeCreate()));
 
@@ -514,12 +521,16 @@ public class CFQNSDatacenter extends Datacenter {
 
     // override xu ly su kien cloudlet moi den:
     public void processCloudletSubmit(SimEvent ev, boolean ack) {
+    	
+    	if(CFQNSHelper.timeStartSimulate < CloudSim.clock()){
+    		start = true;
+    	}
 
         if(state == CFQNSDatacenter.WAITING) toON();
         updateCloudletProcessing();
         try {
             // gets the Cloudlet object
-
+        	if(start)	number++;
             CFQNSJob cl = (CFQNSJob) ev.getData();
             // tim cho cloudlet mot host ON:
             boolean hasAOnHost = false;
@@ -594,8 +605,8 @@ public class CFQNSDatacenter extends Datacenter {
     	
     	if(jobsqueue.contains(cl)){
     		jobsqueue.deleteJob(cl);
-    		count++;
-    		Log.printLine("So job roi di: "+count+"job so: "+cl.getTimeCreate());
+    		if(start) numberOfJobLeave++;
+    		//Log.printLine("So job roi di: "+count+"job so: "+cl.getTimeCreate());
         	//Log.printLine("So job roi di: "+count+"job so: "+((CMSSJob)ev.getData()).getCloudletId());
     		//xoa job tra ve true neu xoa thanh cong
     		if(jobsqueue.isEmpty() ){ //sau khi xoa ma queue trong
@@ -947,6 +958,6 @@ public class CFQNSDatacenter extends Datacenter {
         else
             return numberWAITINGQueue.getMeanQueueLength();
     }
-    public boolean startCountJobLost = false;
+    public boolean startCountJobLost = true;
 
 }

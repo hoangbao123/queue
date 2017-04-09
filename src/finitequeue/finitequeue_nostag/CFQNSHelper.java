@@ -49,9 +49,9 @@ public class CFQNSHelper {
 
     public static CFQNSBroker mainBroker = null;
 
-    public static double totalTimeSimulate = 2e3; // tong cong thoi gian mo phong
-    public static double timeStartSimulate = 1e3; // thoi gian bat dau dem
-
+    public static double totalTimeSimulate = 2e6; // tong cong thoi gian mo phong
+    public static double timeStartSimulate = 1e6; // thoi gian bat dau dem
+    
     public static void setLamda(double lamda) {
         CFQNSHelper.lamda = lamda;
     }
