@@ -1,4 +1,4 @@
-package finitequeue_nostag;
+package finitequeue;
 
 import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.Vm;

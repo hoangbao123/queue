@@ -1,11 +1,11 @@
-package finitequeue_nostag;
+package finitequeue;
 
 import org.cloudbus.cloudsim.*;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.SimEvent;
 
-import controlmidleserverstag.CMSSJob;
+
 import sun.util.logging.resources.logging;
 
 import java.util.*;
@@ -50,8 +50,8 @@ public class CFQNSDatacenter extends Datacenter {
     private double timeOffToMiddle;
     private double verifySetupMode = -1;
     private boolean hasMiddle = true;
-    private long numberOfJobLeave =0, numberOfCompletedJob=0;
-    public int number=0;
+    private double numberOfJobLeave =0, numberOfCompletedJob=0;
+    public double number=0;
     public boolean start = false;
 
 //    private boolean disableEventCMS = false;
@@ -193,10 +193,10 @@ public class CFQNSDatacenter extends Datacenter {
         }
     }
 
-    public long getNumberOfLeftJob(){
+    public double getNumberOfLeftJob(){
     	return numberOfJobLeave;
     }
-    public long getNumberOfCompletedJob(){
+    public double getNumberOfCompletedJob(){
     	return numberOfCompletedJob;
     }
 
@@ -958,6 +958,6 @@ public class CFQNSDatacenter extends Datacenter {
         else
             return numberWAITINGQueue.getMeanQueueLength();
     }
-    public boolean startCountJobLost = true;
+    public boolean startCountJobLost = false;
 
 }

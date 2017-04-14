@@ -1,4 +1,4 @@
-package finitequeue_nostag;
+package finitequeue;
 
 /**
  * Created by dangbk on 13/04/2015.

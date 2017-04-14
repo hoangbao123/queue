@@ -1,4 +1,4 @@
-package finitequeue_nostag;
+package finitequeue;
 
 
 

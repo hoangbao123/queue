@@ -1,4 +1,4 @@
-package finitequeue_nostag;
+package finitequeue;
 
 
 import org.cloudbus.cloudsim.*;
@@ -1366,7 +1366,7 @@ public class CFQNSMain {
 
         boolean hasTimeInitQueue = true; // thay doi cai nay phai thay doi ham init() trong file datacenter
 
-        double[] lamdaarray = {1,2,3,4,5,6,7,8,9,10,11,12,1314,15,16,17,18,19,20};
+        double[] lamdaarray = {7};//,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
         int n = lamdaarray.length;
 
         double[] meanWaittimeNoMiddle = new double[n];
@@ -1385,6 +1385,7 @@ public class CFQNSMain {
         double[] jobLostRatio = new double[n];
         double[] numberOfLeftJob =new double[n];
         double[] numberOfCompletedJob =new double[n];
+	double[] leftJobRatio = new double[n];
 
 
         for (int indexMuy = 0; indexMuy < muy.length; indexMuy++) {
@@ -1497,12 +1498,13 @@ public class CFQNSMain {
                             timenextlist[i] = CFQNSHelper.timenext;
                             numberOfCompletedJob[i] = datacenter0.getNumberOfCompletedJob();
                             numberOfLeftJob[i] = datacenter0.getNumberOfLeftJob();
-                            jobLostRatio[i] = datacenter0.getNumberOfJobLost() / ((CFQNSBroker) broker).getNumberOfJob();
+                            jobLostRatio[i] = datacenter0.getNumberOfJobLost()/datacenter0.number; //((CFQNSBroker) broker).getNumberOfJob();
 
                             meanWaittime[i] = ((CFQNSBroker) broker).getMeanWaittingTime();
                             meanResponsetime[i] = ((CFQNSBroker) broker).getMeanResponseTime();
                             numberONTurnoff[i] = CFQNSHelper.extraCount;
                             numberOfQueue[i] = CFQNSHelper.listSubDatacenter.size();
+			    leftJobRatio[i] = datacenter0.getNumberOfLeftJob()/(datacenter0.getNumberOfCompletedJob()+datacenter0.getNumberOfLeftJob());
                             
 //                Log.printLine(CMSHelper.getWaittingTime(newList));
 
@@ -1751,6 +1753,17 @@ public class CFQNSMain {
                     }
                     System.out.print( jobLostRatio[n - 1]+"]");
                     fw.write(jobLostRatio[n - 1] + "];\n");
+		    System.out.println();
+		
+		    System.out.printf("job left ratio = [");
+                    fw.write("job_left_ratio"+CFQNSHelper.jobsqueuecapacity+" = [");
+                    for (int i = 0; i < n - 1; i++) {
+                      System.out.printf(  leftJobRatio[i]+",");
+                      fw.write(leftJobRatio[i] + ", ");
+                    }
+                    System.out.print( leftJobRatio[n - 1]+"]");
+                    fw.write(leftJobRatio[n - 1] + "];\n");	
+
 
 
                     fw.write("\n_____________________________\n\n");
