@@ -1366,7 +1366,7 @@ public class CFQNSMain {
 
         boolean hasTimeInitQueue = true; // thay doi cai nay phai thay doi ham init() trong file datacenter
 
-        double[] lamdaarray = {7};//,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+        double[] lamdaarray = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
         int n = lamdaarray.length;
 
         double[] meanWaittimeNoMiddle = new double[n];
