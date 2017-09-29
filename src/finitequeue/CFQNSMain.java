@@ -18,12 +18,12 @@ import java.util.List;
  */
 public class CFQNSMain {
     public static double[] muy = {0.2};
-    public static double[] alpha = {0.02};//, 0.001};//,0.5, 1, 5, 10, 20, 50, 100, 150, 200};
+    public static double[] alpha = {0.005};//, 0.001};//,0.5, 1, 5, 10, 20, 50, 100, 150, 200};
     public static int[] capacity = {100,200,500};//, 3000, 2000, 1000};
     public static double[] listThrUp = {0.3};
     public static double[] listThrDown = {-0.3};
     public static int timetomiddle = 400;
-    public static double[] theta = {0.02};
+    public static double[] theta = {0.005};
 
     public static void chayvoilamdathaydoimultiqueues() throws IOException {
          // file luu kq
